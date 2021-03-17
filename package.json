@@ -1,0 +1,32 @@
+{
+  "name": "linebot",
+  "version": "1.0.0",
+  "description": "Line Bot with NodeJs",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon template.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tustoz/linebot-js.git"
+  },
+  "keywords": [
+    "line",
+    "bot",
+    "nodejs"
+  ],
+  "author": "Maxi Aditya Kusuma",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tustoz/linebot-js/issues"
+  },
+  "homepage": "https://github.com/tustoz/linebot-js#readme",
+  "dependencies": {
+    "@line/bot-sdk": "^7.2.0",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "dotenv": "^8.2.0",
+    "nodemon": "^2.0.7"
+  }
+}
