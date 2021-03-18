@@ -1,5 +1,6 @@
 // import all environtment lib: express, line bot sdk
 const express = require("express");
+const axios = require("axios");
 const line = require("@line/bot-sdk");
 const app = express();
 require("dotenv").config();
@@ -22,21 +23,57 @@ const client = new line.Client(config);
 
 // handle event
 function handleEvent(event) {
-  // image
-  if (event.type === "message" && event.message.text === "image") {
+
+  // help text
+  const helps = {
+    texts:
+      "====== BOT COMMAND LIST ======\n" +
+      "/me - your profile\n" +
+      "/weather - weather info\n" +
+      "/zodiac - zodiac\n" +
+      "/translate - translate languages\n" +
+      "/shorten - url shortener\n" +
+      "/curcon - currency converter\n" +
+      "/news - search news\n" +
+      "/music - search music\n" +
+      "/recipe - search recipe\n" +
+      "/kbbi - kbbi search\n" +
+      "/bible - bible search\n" +
+      "/wiki - wikipedia search\n" +
+      "/film - search film\n" +
+      "/anime - search anime\n" +
+      "/pin - pinterest search\n" +
+      "/resi - check resi\n" +
+      "/spec - hp spec checker\n" +
+      "/postal - search postal code\n" +
+      "/schools - indonesian school list\n" +
+      "/museum - indonesian museum list\n" +
+      "/meme - meme generator\n" +
+      "/qr - qr generator\n" +
+      "/pw - pw generatorh\n" +
+      "/wallpapers - wallpapers generator\n" +
+      "/games - games list\n" +
+      "/phone - us num phone generator\n" +
+      "/animal - random animal images\n" +
+      "/botinfo - about bot\n" +
+      "/dev - developer info\n" +
+      "/help - list of all commands\n" +
+      "==============================",
+  };
+
+  // help commands
+  if (event.type === "message" && event.message.text === "/help") {
     return client.replyMessage(event.replyToken, {
-      type: "image",
-      originalContentUrl: "https://example.com/original.jpg",
-      previewImageUrl: "https://example.com/preview.jpg",
+      type: "text",
+      text: helps.texts,
     });
   }
 
-  // audio
-  if (event.type === "message" && event.message.text === "audio") {
-    return client.replyMessage(event.replyToken, {
-      type: "audio",
-      originalContentUrl: "https://example.com/original.m4a",
-      duration: 60000,
+  // my profile
+  if (event.type === "message" && event.message.text === "/me") {
+    return client.getProfile(`line://ti/p/@${event.userId}`, {
+      type: "text",
+      text: getProfile(),
     });
   }
 
@@ -365,14 +402,249 @@ function handleEvent(event) {
   //     });
   //   }
 
-  // text
-  if (event.type === "message" && event.message.text === "texts") {
+  // carousel menu
+  if (event.type === "message" && event.message.text === "/menu") {
     return client.replyMessage(event.replyToken, {
-      type: "text",
-      text: "Hello, World!",
-      size: "xl",
-      weight: "bold",
-      color: "#0000ff",
+      type: "template",
+      altText: "this is a carousel template",
+      template: {
+        type: "carousel",
+        imageSize: "cover",
+        imageAspectRatio: "square",
+        columns: [
+          {
+            thumbnailImageUrl:
+              "https://raw.githubusercontent.com/tustoz/linebot-js/master/utilitas.png",
+            title: "Utilitas 1",
+            text: "Special tools for you!",
+            actions: [
+              {
+                type: "message",
+                label: "My Profile",
+                text: "/me",
+              },
+              {
+                type: "message",
+                label: "Weather",
+                text: "/weather",
+              },
+              {
+                type: "message",
+                label: "Zodiac",
+                text: "/zodiac",
+              },
+            ],
+            imageBackgroundColor: "#FFFFFF",
+          },
+          {
+            thumbnailImageUrl:
+              "https://raw.githubusercontent.com/tustoz/linebot-js/master/utilitas.png",
+            title: "Utilitas 2",
+            text: "Special tools for you!",
+            actions: [
+              {
+                type: "message",
+                label: "Translate",
+                text: "/translate",
+              },
+              {
+                type: "message",
+                label: "Shorten Url",
+                text: "/shorten",
+              },
+              {
+                type: "message",
+                label: "Currency Converter",
+                text: "/curcon",
+              },
+            ],
+          },
+          {
+            thumbnailImageUrl:
+              "https://raw.githubusercontent.com/tustoz/linebot-js/master/utilitas.png",
+            title: "Utilitas 3",
+            text: "Special tools for you!",
+            actions: [
+              {
+                type: "message",
+                label: "Search News",
+                text: "/news",
+              },
+              {
+                type: "message",
+                label: "Search Music",
+                text: "/music",
+              },
+              {
+                type: "message",
+                label: "Search Recipe",
+                text: "/recipe",
+              },
+            ],
+          },
+          {
+            thumbnailImageUrl:
+              "https://raw.githubusercontent.com/tustoz/linebot-js/master/utilitas.png",
+            title: "Utilitas 4",
+            text: "Special tools for you!",
+            actions: [
+              {
+                type: "message",
+                label: "KBBI Search",
+                text: "/kbbi",
+              },
+              {
+                type: "message",
+                label: "Bible Search",
+                text: "/bible",
+              },
+              {
+                type: "message",
+                label: "Wikipedia Search",
+                text: "/wiki",
+              },
+            ],
+          },
+          {
+            thumbnailImageUrl:
+              "https://raw.githubusercontent.com/tustoz/linebot-js/master/utilitas.png",
+            title: "Utilitas 5",
+            text: "Special tools for you!",
+            actions: [
+              {
+                type: "message",
+                label: "Search Film",
+                text: "/film",
+              },
+              {
+                type: "message",
+                label: "Search Anime",
+                text: "/anime",
+              },
+              {
+                type: "message",
+                label: "Pinterest Search",
+                text: "/pin",
+              },
+            ],
+          },
+          {
+            thumbnailImageUrl:
+              "https://raw.githubusercontent.com/tustoz/linebot-js/master/utilitas.png",
+            title: "Utilitas 6",
+            text: "Special tools for you!",
+            actions: [
+              {
+                type: "message",
+                label: "Check Resi",
+                text: "/resi",
+              },
+              {
+                type: "message",
+                label: "HP Spec Checker",
+                text: "/spec",
+              },
+              {
+                type: "message",
+                label: "Check Postal Code",
+                text: "/postal",
+              },
+            ],
+          },
+          {
+            thumbnailImageUrl:
+              "https://raw.githubusercontent.com/tustoz/linebot-js/master/utilitas.png",
+            title: "Utilitas 7",
+            text: "Special tools for you!",
+            actions: [
+              {
+                type: "message",
+                label: "Indonesian Schools",
+                text: "/schools",
+              },
+              {
+                type: "message",
+                label: "Indonesian Museums",
+                text: "/museum",
+              },
+              {
+                type: "message",
+                label: "Meme Generator",
+                text: "/meme",
+              },
+            ],
+          },
+          {
+            thumbnailImageUrl:
+              "https://raw.githubusercontent.com/tustoz/linebot-js/master/utilitas.png",
+            title: "Utilitas 8",
+            text: "Special tools for you!",
+            actions: [
+              {
+                type: "message",
+                label: "QR Code Generator",
+                text: "/qr",
+              },
+              {
+                type: "message",
+                label: "Password Generator",
+                text: "/pw",
+              },
+              {
+                type: "message",
+                label: "Wallpapers Generator",
+                text: "/wallpapers",
+              },
+            ],
+          },
+          {
+            thumbnailImageUrl:
+              "https://raw.githubusercontent.com/tustoz/linebot-js/master/utilitas.png",
+            title: "Utilitas 9",
+            text: "Special tools for you!",
+            actions: [
+              {
+                type: "message",
+                label: "Games",
+                text: "/games",
+              },
+              {
+                type: "message",
+                label: "US Phone Number",
+                text: "/phone",
+              },
+              {
+                type: "message",
+                label: "Random Animal Images",
+                text: "/animal",
+              },
+            ],
+          },
+          {
+            thumbnailImageUrl:
+              "https://raw.githubusercontent.com/tustoz/linebot-js/master/utilitas.png",
+            title: "About Developer",
+            text: "Lets connect with me!",
+            actions: [
+              {
+                type: "uri",
+                label: "Line",
+                uri: "https://line.me/ti/p/~wibusenja",
+              },
+              {
+                type: "uri",
+                label: "Tiktok",
+                uri: "https://tiktok.com/@tustoz",
+              },
+              {
+                type: "uri",
+                label: "Instagram",
+                uri: "https://instagram.com/maxi.aditya",
+              },
+            ],
+          },
+        ],
+      },
     });
   }
 
